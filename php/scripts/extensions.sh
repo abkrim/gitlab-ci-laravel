@@ -59,7 +59,6 @@ export runtimeDeps=" \
     libldap2-dev \
     libmagickwand-dev \
     libmemcached-dev \
-    libmemcachedutil2 \
     libpng-dev \
     libpq-dev \
     librabbitmq-dev \
@@ -69,7 +68,6 @@ export runtimeDeps=" \
     libxml2-dev \
     libxslt1-dev \
     libzip-dev \
-    multiarch-support \
     "
 
 

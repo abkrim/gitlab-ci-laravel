@@ -27,15 +27,17 @@ export DEBIAN_FRONTEND=noninteractive
       git \
       gnupg2 \
       jq \
-      libc-client-dev \
       mariadb-client \
-      mongo-tools \
       openssh-client \
-      python \
-      python-dev \
+      python3 \
       rsync \
       sudo \
       unzip \
       zip \
       zlib1g-dev \
       && rm -rf /var/lib/apt/lists/*
+
+# libc-client for IMAP (Debian flavors provide either name)
+apt-get update \
+  && (apt-get install -yq libc-client-dev || apt-get install -yq libc-client2007e-dev) \
+  && rm -rf /var/lib/apt/lists/*
