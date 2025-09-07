@@ -36,6 +36,9 @@ RUN bash ./packages.sh \
   && adduser --disabled-password --gecos "" $IMAGE_USER && \
   echo "$IMAGE_USER  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \
   mkdir -p /var/www/html $HOME/.config \
+  && printf "[client]\nssl=0\n" > $HOME/.my.cnf \
+  && chown $IMAGE_USER:$IMAGE_USER $HOME/.my.cnf \
+  && chmod 600 $HOME/.my.cnf \
   && rm -rf ~/.composer/cache/* \
   && chown -R $IMAGE_USER:$IMAGE_USER /var/www $HOME \
   && curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh \
