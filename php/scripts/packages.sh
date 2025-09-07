@@ -29,7 +29,6 @@ export DEBIAN_FRONTEND=noninteractive
       jq \
       mariadb-client \
       openssh-client \
-      python3 \
       rsync \
       sudo \
       unzip \
@@ -37,7 +36,3 @@ export DEBIAN_FRONTEND=noninteractive
       zlib1g-dev \
       && rm -rf /var/lib/apt/lists/*
 
-# libc-client for IMAP (Debian flavors provide either name)
-apt-get update \
-  && (apt-get install -yq libc-client-dev || apt-get install -yq libc-client2007e-dev) \
-  && rm -rf /var/lib/apt/lists/*
