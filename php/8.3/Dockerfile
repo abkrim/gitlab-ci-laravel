@@ -35,7 +35,7 @@ RUN bash ./packages.sh \
   && bash ./node-pnpm.sh \
   && adduser --disabled-password --gecos "" $IMAGE_USER && \
   echo "$IMAGE_USER  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \
-  mkdir -p /var/www/html \
+  mkdir -p /var/www/html $HOME/.config \
   && rm -rf ~/.composer/cache/* \
   && chown -R $IMAGE_USER:$IMAGE_USER /var/www $HOME \
   && curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh \
