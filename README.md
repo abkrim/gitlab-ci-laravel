@@ -12,13 +12,18 @@
 ## Based on [Official PHP images](https://hub.docker.com/_/php/)
 
 > PHP 8.0 available!
+>
+> Fork note: PHP 8.3 images with Node 22 + pnpm added.
 
-- ```8.0```, ```8```, ```latest``` [(8.0/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0 "Get your own image badge on microbadger.com")
+- ```8.3``` [(8.3/Dockerfile)](php/8.3/Dockerfile)
+- ```8.0``` [(8.0/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0 "Get your own image badge on microbadger.com")
 
-- ```8.0-alpine```, ```alpine``` [(8.0/alpine/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/alpine/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-alpine.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-alpine "Get your own image badge on microbadger.com")
+- ```8.3-alpine``` [(8.3/alpine/Dockerfile)](php/8.3/alpine/Dockerfile)
+- ```8.0-alpine``` [(8.0/alpine/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/alpine/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-alpine.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-alpine "Get your own image badge on microbadger.com")
 
 
-- ```8.0-fpm```, ```fpm``` [(8.0/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/fpm/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-fpm "Get your own image badge on microbadger.com")
+- ```8.3-fpm``` [(8.3/fpm/Dockerfile)](php/8.3/fpm/Dockerfile)
+- ```8.0-fpm``` [(8.0/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/fpm/Dockerfile) - [![](https://images/microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-fpm "Get your own image badge on microbadger.com")
 
 - ```7.4```, ```7``` [(7.4/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.4/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.4.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.4 "Get your own image badge on microbadger.com")
 
@@ -35,7 +40,7 @@
 
 - ```7.3-fpm``` [(7.3/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/fpm/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3-fpm "Get your own image badge on microbadger.com")
 
-All versions come with [Node 14](https://nodejs.org/en/), [Composer](https://getcomposer.org/) and [Yarn](https://yarnpkg.com)
+All base images come with [Node 14](https://nodejs.org/en/), [Composer](https://getcomposer.org/) and [Yarn](https://yarnpkg.com). Added PHP 8.3 images come with Node 22 and pnpm via corepack.
 
 > PHP 7.0.x, 7.1.x and PHP 7.2.x are now deprecated and removed from this repo since they reach end of life. Your scripts will not stop working since the images are still available but they will not be receiving new builds from now on. For more information please visit https://www.php.net/supported-versions.php
 

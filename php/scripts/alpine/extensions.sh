@@ -36,7 +36,7 @@ apk --update --no-cache add \
 
 apk --update --no-cache add libzip-dev libsodium-dev
 
-if [[ $PHP_VERSION == "8.0" ]]; then
+if [[ "$PHP_VERSION" == 8.* ]]; then
   docker-php-ext-configure ldap
   docker-php-ext-install -j "$(nproc)" ldap
   PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl
@@ -52,7 +52,7 @@ else
   docker-php-source delete
 fi
 
-if [[ $PHP_VERSION == "8.0" || $PHP_VERSION == "7.4" ]]; then
+if [[ "$PHP_VERSION" == 8.* || $PHP_VERSION == "7.4" ]]; then
   docker-php-ext-configure gd --with-freetype --with-jpeg
 else
   docker-php-ext-configure gd \
@@ -64,23 +64,32 @@ fi
 
 docker-php-ext-install -j "$(nproc)" gd
 
+if [[ "$PHP_VERSION" == 8.* ]]; then
+  pecl install xdebug \
+    && docker-php-ext-enable xdebug
+else
+  git clone --depth 1 -b 3.0.2 "https://github.com/xdebug/xdebug" \
+    && cd xdebug \
+    && phpize \
+    && ./configure \
+    && make clean \
+    && make \
+    && make install \
+    && docker-php-ext-enable xdebug
+fi
 
-git clone --depth 1 -b 3.0.2 "https://github.com/xdebug/xdebug" \
-  && cd xdebug \
-  && phpize \
-  && ./configure \
-  && make clean \
-  && make \
-  && make install \
-  && docker-php-ext-enable xdebug
-
-docker-php-source extract \
-    && curl -L -o /tmp/redis.tar.gz "https://github.com/phpredis/phpredis/archive/5.3.3.tar.gz" \
-    && tar xfz /tmp/redis.tar.gz \
-    && rm -r /tmp/redis.tar.gz \
-    && mv phpredis-5.3.3 /usr/src/php/ext/redis \
-    && docker-php-ext-install redis \
-    && docker-php-source delete
+if [[ "$PHP_VERSION" == 8.* ]]; then
+  pecl install redis \
+    && docker-php-ext-enable redis
+else
+  docker-php-source extract \
+      && curl -L -o /tmp/redis.tar.gz "https://github.com/phpredis/phpredis/archive/5.3.3.tar.gz" \
+      && tar xfz /tmp/redis.tar.gz \
+      && rm -r /tmp/redis.tar.gz \
+      && mv phpredis-5.3.3 /usr/src/php/ext/redis \
+      && docker-php-ext-install redis \
+      && docker-php-source delete
+fi
 
 docker-php-source extract \
     && apk add --no-cache --virtual .phpize-deps-configure $PHPIZE_DEPS \
@@ -89,20 +98,25 @@ docker-php-source extract \
     && apk del .phpize-deps-configure \
     && docker-php-source delete
 
-docker-php-source extract \
-    && apk add --no-cache --virtual .cassandra-deps libressl-dev libuv-dev cassandra-cpp-driver-dev \
-    && curl -L -o /tmp/cassandra.tar.gz "https://github.com/datastax/php-driver/archive/24d85d9f1d.tar.gz" \
-    && mkdir /tmp/cassandra \
-    && tar xfz /tmp/cassandra.tar.gz --strip 1 -C /tmp/cassandra \
-    && rm -r /tmp/cassandra.tar.gz \
-    && curl -L "https://github.com/datastax/php-driver/pull/135.patch" | patch -p1 -d /tmp/cassandra -i - \
-    && mv /tmp/cassandra/ext /usr/src/php/ext/cassandra \
-    && rm -rf /tmp/cassandra \
-    && docker-php-ext-install cassandra \
-    && apk del .cassandra-deps \
-    && docker-php-source delete
+if [[ "$PHP_VERSION" != 8.* ]]; then
+  docker-php-source extract \
+      && apk add --no-cache --virtual .cassandra-deps libressl-dev libuv-dev cassandra-cpp-driver-dev \
+      && curl -L -o /tmp/cassandra.tar.gz "https://github.com/datastax/php-driver/archive/24d85d9f1d.tar.gz" \
+      && mkdir /tmp/cassandra \
+      && tar xfz /tmp/cassandra.tar.gz --strip 1 -C /tmp/cassandra \
+      && rm -r /tmp/cassandra.tar.gz \
+      && curl -L "https://github.com/datastax/php-driver/pull/135.patch" | patch -p1 -d /tmp/cassandra -i - \
+      && mv /tmp/cassandra/ext /usr/src/php/ext/cassandra \
+      && rm -rf /tmp/cassandra \
+      && docker-php-ext-install cassandra \
+      && apk del .cassandra-deps \
+      && docker-php-source delete
+fi
 
-if [[ $PHP_VERSION == "8.0" ]]; then
+if [[ "$PHP_VERSION" == 8.* ]]; then
+  pecl install amqp imagick mongodb \
+    && docker-php-ext-enable amqp imagick mongodb
+else
   #AMQP
   docker-php-source extract \
     && mkdir /usr/src/php/ext/amqp \
@@ -135,21 +149,20 @@ if [[ $PHP_VERSION == "8.0" ]]; then
     && rm -rf xmlrpc \
     && docker-php-ext-enable xmlrpc
 
-    pecl install mongodb \
-      && docker-php-ext-enable mongodb
-else
-  pecl install amqp imagick mongodb \
-    && docker-php-ext-enable amqp imagick mongodb
+  pecl install mongodb \
+    && docker-php-ext-enable mongodb
 fi
 
-git clone "https://github.com/php-memcached-dev/php-memcached.git" \
-    && cd php-memcached \
-    && phpize \
-    && ./configure --disable-memcached-sasl \
-    && make \
-    && make install \
-    && cd ../ && rm -rf php-memcached \
-    && docker-php-ext-enable memcached
+if [[ "$PHP_VERSION" != 8.* ]]; then
+  git clone "https://github.com/php-memcached-dev/php-memcached.git" \
+      && cd php-memcached \
+      && phpize \
+      && ./configure --disable-memcached-sasl \
+      && make \
+      && make install \
+      && cd ../ && rm -rf php-memcached \
+      && docker-php-ext-enable memcached
+fi
 
 { \
     echo 'opcache.enable=1'; \
@@ -176,7 +189,7 @@ git clone "https://github.com/php-memcached-dev/php-memcached.git" \
 
 echo "memory_limit=1G" > /usr/local/etc/php/conf.d/zz-conf.ini
 
-if [[ $PHP_VERSION == "8.0" ]]; then
+if [[ "$PHP_VERSION" == 8.* ]]; then
   # https://xdebug.org/docs/upgrade_guide#changed-xdebug.coverage_enable
   echo 'xdebug.mode=coverage' > /usr/local/etc/php/conf.d/20-xdebug.ini
 else

@@ -1,25 +1,24 @@
-FROM php:8.0
+FROM php:8.3-fpm
 
 ARG BUILD_DATE
 ARG VCS_REF
 
-LABEL maintainer="Eduardo Bizarro <edbizarro@gmail.com>" \
-  PHP="8.0" \
-  NODE="14" \
-  org.label-schema.name="edbizarro/gitlab-ci-pipeline-php" \
-  org.label-schema.description=":coffee: Docker images for build and test PHP applications with Gitlab CI (or any other CI plataform!)" \
+LABEL maintainer="Fork Maintainers" \
+  PHP="8.3" \
+  NODE="22" \
+  org.label-schema.name="gitlab-ci-pipeline-php (fork)" \
+  org.label-schema.description=":coffee: PHP 8.3 FPM image for build/test with pnpm and Node 22" \
   org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.schema-version="1.0" \
-  org.label-schema.vcs-url="https://github.com/edbizarro/gitlab-ci-pipeline-php" \
   org.label-schema.vcs-ref=$VCS_REF
 
 # Set correct environment variables
 ENV IMAGE_USER=php
 ENV HOME=/home/$IMAGE_USER
 ENV COMPOSER_HOME=$HOME/.composer
-ENV PATH=$HOME/.yarn/bin:$PATH
-ENV GOSS_VERSION="0.3.16"
-ENV PHP_VERSION=8.0
+ENV PATH=$HOME/.local/share/pnpm:$PATH
+ENV GOSS_VERSION="0.4.4"
+ENV PHP_VERSION=8.3
 
 USER root
 
@@ -30,16 +29,16 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY ./php/scripts/*.sh /tmp/
 RUN chmod +x /tmp/*.sh
 
-# Install2
+# Install
 RUN bash ./packages.sh \
   && bash ./extensions.sh \
-  && bash ./node.sh \
+  && bash ./node-pnpm.sh \
   && adduser --disabled-password --gecos "" $IMAGE_USER && \
-  echo "PATH=$(yarn global bin):$PATH" >> /root/.profile && \
-  echo "PATH=$(yarn global bin):$PATH" >> /root/.bashrc && \
-  mkdir -p /var/www/html \
+  echo "$IMAGE_USER  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \
+  mkdir -p /var/www/html && \
+  chown -R $IMAGE_USER:$IMAGE_USER /var/www $HOME \
   && rm -rf ~/.composer/cache/* \
-  && chown -R $IMAGE_USER:$IMAGE_USER /var/www $HOME \
+  && chown -R $IMAGE_USER:$IMAGE_USER $COMPOSER_HOME \
   && curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh \
   && bash ./cleanup.sh
 

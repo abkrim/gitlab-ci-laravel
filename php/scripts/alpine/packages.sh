@@ -31,3 +31,5 @@ apk add --update --no-cache \
     build-base \
     file \
     openssl-dev
+
+# leave Node installation to nodeyarn.sh (yarn based for 8.0 images)

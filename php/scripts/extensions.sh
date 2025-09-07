@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-if [[ $PHP_VERSION == "8.0" ]]; then
+# Treat all PHP 8.x versions the same as 8.0
+if [[ "$PHP_VERSION" == 8.* ]]; then
   export extensions=" \
     bcmath \
     bz2 \
@@ -78,7 +79,7 @@ apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && docker-php-ext-install -j$(nproc) $extensions
 
-if [[ $PHP_VERSION == "8.0" || $PHP_VERSION == "7.4" ]]; then
+if [[ "$PHP_VERSION" == 8.* || $PHP_VERSION == "7.4" ]]; then
   docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
@@ -96,7 +97,7 @@ else
     && docker-php-source delete
 fi
 
-if ! [[ $PHP_VERSION == "8.0" ]]; then
+if [[ "$PHP_VERSION" != 8.* ]]; then
   docker-php-source extract \
     && curl -L -o /tmp/cassandra-cpp-driver.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver_2.14.0-1_amd64.deb" \
     && curl -L -o /tmp/cassandra-cpp-driver-dev.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver-dev_2.14.0-1_amd64.deb" \
@@ -206,7 +207,7 @@ fi
 
 echo 'memory_limit=1024M' > /usr/local/etc/php/conf.d/zz-conf.ini
 
-if [[ $PHP_VERSION == "8.0" || $PHP_VERSION == "7.4" ]]; then
+if [[ "$PHP_VERSION" == 8.* || $PHP_VERSION == "7.4" ]]; then
   # https://xdebug.org/docs/upgrade_guide#changed-xdebug.coverage_enable
   echo 'xdebug.mode=coverage' > /usr/local/etc/php/conf.d/20-xdebug.ini
 else
