@@ -13,7 +13,6 @@ apk --update --no-cache add \
   icu-dev \
   imagemagick \
   imagemagick-dev \
-  imap-dev \
   krb5-dev \
   libbz2 \
   libedit-dev \
@@ -39,15 +38,11 @@ apk --update --no-cache add libzip-dev libsodium-dev
 if [[ "$PHP_VERSION" == 8.* ]]; then
   docker-php-ext-configure ldap
   docker-php-ext-install -j "$(nproc)" ldap
-  PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-  docker-php-ext-install -j "$(nproc)" imap
   docker-php-ext-install -j "$(nproc)" exif pcntl bcmath bz2 calendar intl mysqli opcache pdo_mysql pdo_pgsql pgsql soap xsl zip gmp
   docker-php-source delete
 else
   docker-php-ext-configure ldap
   docker-php-ext-install -j "$(nproc)" ldap
-  PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-  docker-php-ext-install -j "$(nproc)" imap
   docker-php-ext-install -j "$(nproc)" exif xmlrpc pcntl bcmath bz2 calendar intl mysqli opcache pdo_mysql pdo_pgsql pgsql soap xsl zip gmp
   docker-php-source delete
 fi
