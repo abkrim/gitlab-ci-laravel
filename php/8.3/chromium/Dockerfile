@@ -1,4 +1,4 @@
-FROM edbizarro/gitlab-ci-pipeline-php:8.3
+FROM php:8.3
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -24,11 +24,26 @@ USER root
 
 WORKDIR /tmp
 
+# COPY INSTALL SCRIPTS
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY ./php/scripts/*.sh /tmp/
 RUN chmod +x /tmp/*.sh
 
+# Install
 RUN bash ./packages.sh \
-  && bash ./chromium.sh
+  && bash ./extensions.sh \
+  && bash ./node-pnpm.sh \
+  && bash ./chromium.sh \
+  && adduser --disabled-password --gecos "" $IMAGE_USER && \
+  echo "$IMAGE_USER  ALL = ( ALL ) NOPASSWD: ALL" >> /etc/sudoers && \
+  mkdir -p /var/www/html $HOME/.config \
+  && printf "[client]\nssl=0\n" > $HOME/.my.cnf \
+  && chown $IMAGE_USER:$IMAGE_USER $HOME/.my.cnf \
+  && chmod 600 $HOME/.my.cnf \
+  && rm -rf ~/.composer/cache/* \
+  && chown -R $IMAGE_USER:$IMAGE_USER /var/www $HOME \
+  && curl -fsSL https://goss.rocks/install | GOSS_VER=v${GOSS_VERSION} sh \
+  && bash ./cleanup.sh
 
 USER $IMAGE_USER
 
