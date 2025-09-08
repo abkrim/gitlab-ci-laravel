@@ -10,7 +10,8 @@
 **GitHub**: [abkrim/gitlab-ci-laravel](https://github.com/abkrim/gitlab-ci-laravel)
 
 > **Status**: ✅ GitHub Actions configured and ready for automated builds  
-> **Last Update**: Mon Sep 8 20:04:23 CEST 2025
+> **Last Update**: Mon Sep 8 20:15:00 CEST 2025  
+> **Repository**: Successfully migrated to gitlab-ci-laravel
 
 **Available Tags**:
 - `abkrim/laravel-gitlab-ci:8.3` (also available as `latest`)
