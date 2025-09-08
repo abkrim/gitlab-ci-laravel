@@ -6,7 +6,8 @@
 
 ## Docker Hub Repository
 
-**Repository**: [abkrim/laravel-gitlab-ci](https://hub.docker.com/repository/docker/abkrim/laravel-gitlab-ci/general)
+**Repository**: [abkrim/laravel-gitlab-ci](https://hub.docker.com/repository/docker/abkrim/laravel-gitlab-ci/general)  
+**GitHub**: [abkrim/gitlab-ci-laravel](https://github.com/abkrim/gitlab-ci-laravel)
 
 > **Status**: ✅ GitHub Actions configured and ready for automated builds  
 > **Last Update**: Mon Sep 8 20:04:23 CEST 2025
@@ -24,7 +25,7 @@
 
 ## Differences from Original Project
 
-This fork maintains active development only for PHP 8.3 and replaces Yarn with pnpm (Node 22 via corepack). The original project included multiple PHP versions (7.3, 7.4, 8.0, 8.3) and used Yarn as the Node.js package manager.
+This fork focuses on modern PHP versions and replaces Yarn with pnpm (Node 22 via corepack). Currently, PHP 8.3 is actively maintained, with plans to add more versions as needed. The original project included multiple PHP versions (7.3, 7.4, 8.0, 8.3) and used Yarn as the Node.js package manager.
 
 ## Usage
 
@@ -126,14 +127,15 @@ This fork is based on the excellent work of:
 - **Original Author**: [@edbizarro](https://github.com/edbizarro)
 - **Original License**: MIT
 
-The original project provided Docker images optimized for GitLab CI with multiple PHP versions (7.3, 7.4, 8.0, 8.3) and different variants (Alpine, FPM, Chromium). This fork maintains the philosophy and structure of the original project, but focuses solely on PHP 8.3 with pnpm as the Node.js package manager.
+The original project provided Docker images optimized for GitLab CI with multiple PHP versions (7.3, 7.4, 8.0, 8.3) and different variants (Alpine, FPM, Chromium). This fork maintains the philosophy and structure of the original project, but focuses on modern PHP versions with pnpm as the Node.js package manager.
 
 ### Why This Fork?
 
 - The original project appears to have limited maintenance
-- Specific need to maintain only PHP 8.3 in active development
+- Focus on modern PHP versions with active development
 - Migration from Yarn to pnpm for better performance and dependency management
 - Independent maintenance without depending on the original project
+- Flexible approach to add new PHP versions as needed
 
 If the original project returns to regular activity, it's recommended to consider contributing directly to that repository.
 
