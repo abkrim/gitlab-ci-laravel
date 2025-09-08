@@ -58,7 +58,6 @@ export runtimeDeps=" \
     libkrb5-dev \
     libldap2-dev \
     libmagickwand-dev \
-    libmemcached-dev \
     libpng-dev \
     libpq-dev \
     librabbitmq-dev \
@@ -92,21 +91,6 @@ else
 fi
 
 if [[ "$PHP_VERSION" != 8.* ]]; then
-  docker-php-source extract \
-    && curl -L -o /tmp/cassandra-cpp-driver.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver_2.14.0-1_amd64.deb" \
-    && curl -L -o /tmp/cassandra-cpp-driver-dev.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver-dev_2.14.0-1_amd64.deb" \
-    && dpkg -i /tmp/cassandra-cpp-driver.deb /tmp/cassandra-cpp-driver-dev.deb \
-    && rm /tmp/cassandra-cpp-driver.deb /tmp/cassandra-cpp-driver-dev.deb \
-    && curl -L -o /tmp/cassandra.tar.gz "https://github.com/datastax/php-driver/archive/24d85d9f1d.tar.gz" \
-    && mkdir /tmp/cassandra \
-    && tar xfz /tmp/cassandra.tar.gz --strip 1 -C /tmp/cassandra \
-    && rm -r /tmp/cassandra.tar.gz \
-    && curl -L "https://github.com/datastax/php-driver/pull/135.patch" | patch -p1 -d /tmp/cassandra -i - \
-    && mv /tmp/cassandra/ext /usr/src/php/ext/cassandra \
-    && rm -rf /tmp/cassandra \
-    && docker-php-ext-install cassandra \
-    && docker-php-source delete
-
   docker-php-source extract \
     && git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/ \
     && docker-php-ext-install memcached \
@@ -150,26 +134,7 @@ if [[ "$PHP_VERSION" != 8.* ]]; then
 
 else
 
-  docker-php-source extract \
-    && curl -L -o /tmp/cassandra-cpp-driver.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver_2.14.0-1_amd64.deb" \
-    && curl -L -o /tmp/cassandra-cpp-driver-dev.deb "https://downloads.datastax.com/cpp-driver/ubuntu/18.04/cassandra/v2.14.0/cassandra-cpp-driver-dev_2.14.0-1_amd64.deb" \
-    && dpkg -i /tmp/cassandra-cpp-driver.deb /tmp/cassandra-cpp-driver-dev.deb \
-    && rm /tmp/cassandra-cpp-driver.deb /tmp/cassandra-cpp-driver-dev.deb \
-    && curl -L -o /tmp/cassandra.tar.gz "https://github.com/datastax/php-driver/archive/24d85d9f1d.tar.gz" \
-    && mkdir /tmp/cassandra \
-    && tar xfz /tmp/cassandra.tar.gz --strip 1 -C /tmp/cassandra \
-    && rm -r /tmp/cassandra.tar.gz \
-    && curl -L "https://github.com/datastax/php-driver/pull/135.patch" | patch -p1 -d /tmp/cassandra -i - \
-    && mv /tmp/cassandra/ext /usr/src/php/ext/cassandra \
-    && rm -rf /tmp/cassandra \
-    && docker-php-ext-install cassandra \
-    && docker-php-source delete
-
-  docker-php-source extract \
-    && git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached/ \
-    && docker-php-ext-install memcached \
-    && docker-php-ext-enable memcached \
-    && docker-php-source delete
+  # Skip memcached on PHP 8.x to avoid missing runtime lib issues
 
   pecl channel-update pecl.php.net \
     && pecl install amqp redis apcu imagick xdebug \
@@ -208,4 +173,3 @@ else
   echo 'xdebug.coverage_enable=1' > /usr/local/etc/php/conf.d/20-xdebug.ini
 fi
 
-apt-get purge -yqq --auto-remove $buildDeps
