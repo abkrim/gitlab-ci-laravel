@@ -8,7 +8,8 @@
 
 **Repository**: [abkrim/laravel-gitlab-ci](https://hub.docker.com/repository/docker/abkrim/laravel-gitlab-ci/general)
 
-> **Status**: ✅ GitHub Actions configured and ready for automated builds
+> **Status**: ✅ GitHub Actions configured and ready for automated builds  
+> **Last Update**: Mon Sep 8 20:04:23 CEST 2025
 
 **Available Tags**:
 - `abkrim/laravel-gitlab-ci:8.3` (also available as `latest`)
