@@ -1,213 +1,97 @@
-# Build and test PHP applications with Gitlab CI (or any other CI platform)
+## Laravel GitLab CI image (PHP 8.3)
 
-> Docker images with everything you'll need to build and test PHP applications.
+Este repositorio es un fork del proyecto original `edbizarro/gitlab-ci-pipeline-php`.
 
-![Logo](https://raw.githubusercontent.com/edbizarro/gitlab-ci-pipeline-php/master/gitlab-ci-pipeline-php.png)
+En este fork solo se mantiene en desarrollo activo la versión PHP 8.3 y se sustituye Yarn por pnpm (Node 22 vía corepack).
 
----
-![GitHub last commit](https://img.shields.io/github/last-commit/edbizarro/gitlab-ci-pipeline-php.svg?style=for-the-badge&logo=git) [![Docker Pulls](https://img.shields.io/docker/pulls/edbizarro/gitlab-ci-pipeline-php.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/edbizarro/gitlab-ci-pipeline-php/) [![building status](https://gitlab.com/edbizarro/gitlab-ci-pipeline-php/badges/master/pipeline.svg)](https://gitlab.com/edbizarro/gitlab-ci-pipeline-php/commits/master)
-
----
-
-## Based on [Official PHP images](https://hub.docker.com/_/php/)
-
-> PHP 8.0 available!
->
-> Fork note: PHP 8.3 images with Node 22 + pnpm added.
-
-- ```8.3``` [(8.3/Dockerfile)](php/8.3/Dockerfile)
-- ```8.0``` [(8.0/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0 "Get your own image badge on microbadger.com")
-
-- ```8.3-alpine``` [(8.3/alpine/Dockerfile)](php/8.3/alpine/Dockerfile)
-- ```8.0-alpine``` [(8.0/alpine/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/alpine/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-alpine.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-alpine "Get your own image badge on microbadger.com")
-
-
-- ```8.3-fpm``` [(8.3/fpm/Dockerfile)](php/8.3/fpm/Dockerfile)
-- ```8.0-fpm``` [(8.0/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/fpm/Dockerfile) - [![](https://images/microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-fpm "Get your own image badge on microbadger.com")
-
-- ```7.4```, ```7``` [(7.4/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.4/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.4.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.4 "Get your own image badge on microbadger.com")
-
-- ```7.4-alpine```, ```alpine``` [(7.4/alpine/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.4/alpine/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.4-alpine.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.4-alpine "Get your own image badge on microbadger.com")
-
-
-- ```7.4-fpm```, ```fpm``` [(7.4/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.4/fpm/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.4-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.4-fpm "Get your own image badge on microbadger.com")
-
-- ```7.3``` [(7.3/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3 "Get your own image badge on microbadger.com")
-
-- ```7.3-alpine``` [(7.3/alpine/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/alpine/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3-alpine.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3-alpine "Get your own image badge on microbadger.com")
-
-- ```7.3-alpine-lts```, ```alpine-lts``` [(7.3/alpine/Dockerfile-lts)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/alpine/Dockerfile-lts) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3-alpine-lts.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3-alpine-lts "Get your own image badge on microbadger.com")
-
-- ```7.3-fpm``` [(7.3/fpm/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/fpm/Dockerfile) - [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3-fpm.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3-fpm "Get your own image badge on microbadger.com")
-
-All base images come with [Node 14](https://nodejs.org/en/), [Composer](https://getcomposer.org/) and [Yarn](https://yarnpkg.com). Added PHP 8.3 images come with Node 22 and pnpm via corepack.
-
-> PHP 7.0.x, 7.1.x and PHP 7.2.x are now deprecated and removed from this repo since they reach end of life. Your scripts will not stop working since the images are still available but they will not be receiving new builds from now on. For more information please visit https://www.php.net/supported-versions.php
+### Imagen
+- Docker Hub: `abkrim/laravel-gitlab-ci:8.3` (también `latest`)
+- Base: `php:8.3` (Debian). Multi‑arch: linux/amd64 y linux/arm64
+- Incluye: Composer 2, Node 22 + pnpm, Redis, APCu, PDO MySQL, Imagick, Xdebug (coverage), git, jq, rsync, unzip, zip
+- `mysql` CLI configurado para entorno local (sin TLS) mediante `~/.my.cnf`
 
 ---
 
-## Laravel projects
+### Uso rápido (local)
+Ejecuta tests de un proyecto Laravel con MySQL 8.0 y Redis levantados aparte:
 
-All images come with PHP (with all laravel required extensions), Composer (with [hirak/prestissimo](https://github.com/hirak/prestissimo) to speed up installs), Node and [Yarn](https://yarnpkg.com).
-
-Everything you need to test Laravel projects :D
-
-### Laravel Dusk
-
-To run Dusk tests we need chromium installed on the image, because of that we have a special tag for this case.
-
-- ```8.0-chromium``` [(8.0/chromium/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/8.0/chromium/Dockerfile) [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:8.0-chromium.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:8.0-chromium "Get your own image badge on microbadger.com")
-- ```7.4-chromium``` [(7.4/chromium/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.4/chromium/Dockerfile) [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.4-chromium.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.4-chromium "Get your own image badge on microbadger.com")
-- ```7.3-chromium``` [(7.3/chromium/Dockerfile)](https://github.com/edbizarro/gitlab-ci-pipeline-php/blob/master/php/7.3/chromium/Dockerfile) [![](https://images.microbadger.com/badges/image/edbizarro/gitlab-ci-pipeline-php:7.3-chromium.svg)](https://microbadger.com/images/edbizarro/gitlab-ci-pipeline-php:7.3-chromium "Get your own image badge on microbadger.com")
-
-Check *Dusk example* for more details.
-
----
-
-## Gitlab pipeline examples
-
-### Laravel test examples
-
-#### Simple ```.gitlab-ci.yml``` using mysql service
-
-```yaml
-# Variables
-variables:
-  MYSQL_ROOT_PASSWORD: root
-  MYSQL_USER: homestead
-  MYSQL_PASSWORD: secret
-  MYSQL_DATABASE: homestead
-  DB_HOST: mysql
-
-test:
-  stage: test
-  services:
-    - mysql:5.7
-  image: edbizarro/gitlab-ci-pipeline-php:8.0-alpine
-  script:
-    - yarn install --pure-lockfile
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
-    - cp .env.example .env
-    - php artisan key:generate
-    - php artisan migrate:refresh --seed
-    - ./vendor/phpunit/phpunit/phpunit -v --coverage-text --colors=never --stderr
+```bash
+docker run --rm -it -v "$PWD":/var/www/html -w /var/www/html abkrim/laravel-gitlab-ci:8.3 bash -lc 'composer install --no-interaction --prefer-dist && pnpm install && cp .env.example .env && php artisan key:generate && php artisan migrate --force && ./vendor/bin/pest -v'
 ```
 
-#### Advanced ```.gitlab-ci.yml``` using mysql service, stages and cache
+Si necesitas MySQL/Redis locales, ejemplo mínimo con docker compose:
 
 ```yaml
-stages:
-  - test
-  - deploy
-
-# Variables
-variables:
-  MYSQL_ROOT_PASSWORD: root
-  MYSQL_USER: homestead
-  MYSQL_PASSWORD: secret
-  MYSQL_DATABASE: homestead
-  DB_HOST: mysql
-
-# Speed up builds
-cache:
-  key: $CI_BUILD_REF_NAME # changed to $CI_COMMIT_REF_NAME in Gitlab 9.x
-  paths:
-    - vendor
-    - node_modules
-    - public
-    - .yarn
-
-
-test:
-  stage: test
-  services:
-    - mysql:5.7
-  image: edbizarro/gitlab-ci-pipeline-php:8.0-alpine
-  script:
-    - yarn config set cache-folder .yarn
-    - yarn install --pure-lockfile
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
-    - cp .env.example .env
-    - php artisan key:generate
-    - php artisan migrate:refresh --seed
-    - ./vendor/phpunit/phpunit/phpunit -v --coverage-text --colors=never --stderr
-  artifacts:
-    paths:
-      - ./storage/logs # for debugging
-    expire_in: 7 days
-    when: always
-
-deploy:
-  stage: deploy
-  image: edbizarro/gitlab-ci-pipeline-php:8.0-alpine
-  script:
-    - echo "Deploy all the things!"
-  only:
-    - master
-  when: on_success
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: homestead
+  redis:
+    image: redis:7
+  app:
+    image: abkrim/laravel-gitlab-ci:8.3
+    command: ["sleep","infinity"]
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: homestead
+      DB_USERNAME: homestead
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 ```
 
-#### Laravel Dusk tests ```.gitlab-ci.yml``` using mysql service and cache
+---
 
+### Ejemplo `.gitlab-ci.yml` (tests con pnpm + Pest)
 ```yaml
 stages:
   - test
 
-# Variables
+image: abkrim/laravel-gitlab-ci:8.3
+
+services:
+  - name: mysql:8.0
+  - name: redis:7
+
 variables:
   MYSQL_ROOT_PASSWORD: root
   MYSQL_USER: homestead
   MYSQL_PASSWORD: secret
   MYSQL_DATABASE: homestead
   DB_HOST: mysql
+  DB_PORT: "3306"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
 
-# Speed up builds
 cache:
-  key: $CI_BUILD_REF_NAME # changed to $CI_COMMIT_REF_NAME in Gitlab 9.x
   paths:
     - vendor
     - node_modules
-    - public
-    - .yarn
-
 
 test:
   stage: test
-  services:
-    - mysql:5.7
-  image: edbizarro/gitlab-ci-pipeline-php:8.0-chromium
   script:
-    - yarn config set cache-folder .yarn
-    - yarn install --pure-lockfile
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
+    - composer install --no-interaction --prefer-dist
+    - pnpm install
     - cp .env.example .env
     - php artisan key:generate
-    - php artisan migrate:refresh --seed
-    - php artisan serve &
-    - ./vendor/laravel/dusk/bin/chromedriver-linux --port=9515 &
-    - sleep 5
-    - php artisan dusk
-  artifacts:
-    paths:
-      - ./storage/logs # for debugging
-      - ./tests/Browser/screenshots # for Dusk screenshots
-      - ./tests/Browser/console
-    expire_in: 7 days
-    when: always
+    - php artisan migrate --force
+    - ./vendor/bin/pest -v
 ```
----
-
-## Deploying Laravel applications with Gitlab
-
-Recommended
-
-- [Deployer](https://deployer.org/blog/how-to-deploy-laravel)
-- [Envoyer](https://envoyer.io)
 
 ---
 
-Special thanks to [Ambientum](https://github.com/codecasts/ambientum), an incredible Brazilian project, for the inspiration.
+### Notas
+- Esta imagen usa pnpm (no Yarn). Node 22 via corepack.
+- Xdebug está configurado en modo cobertura para PHP 8.x (coverage en Pest si lo habilitas en tus comandos).
+- El cliente `mysql` se configura sin TLS para facilitar el uso en local; PDO en Laravel no requiere cambios por defecto.
 
-[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/contains-cat-gifs.svg)](https://forthebadge.com)
-[![forthebadge](http://forthebadge.com/images/badges/built-by-developers.svg)](http://forthebadge.com)
+### Licencia
+MIT (igual que el proyecto original).
