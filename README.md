@@ -1,8 +1,12 @@
 ## Laravel GitLab CI image (PHP 8.3)
 
-Este repositorio es un fork del proyecto original `edbizarro/gitlab-ci-pipeline-php`.
+> **Nota importante**: Este repositorio es un fork independiente del proyecto original [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php). 
+> 
+> **Créditos y agradecimientos**: Todo el mérito del trabajo inicial pertenece a [@edbizarro](https://github.com/edbizarro) y los colaboradores del proyecto original. Este fork mantiene el respeto y reconocimiento al trabajo original.
 
-En este fork solo se mantiene en desarrollo activo la versión PHP 8.3 y se sustituye Yarn por pnpm (Node 22 vía corepack).
+### Diferencias con el proyecto original
+
+En este fork se mantiene en desarrollo activo únicamente la versión PHP 8.3 y se sustituye Yarn por pnpm (Node 22 vía corepack). El proyecto original incluía múltiples versiones de PHP (7.3, 7.4, 8.0, 8.3) y usaba Yarn como gestor de paquetes de Node.js.
 
 ### Imagen
 - Docker Hub: `abkrim/laravel-gitlab-ci:8.3` (también `latest`)
@@ -95,3 +99,24 @@ test:
 
 ### Licencia
 MIT (igual que el proyecto original).
+
+---
+
+## Proyecto Original
+
+Este fork está basado en el excelente trabajo de:
+
+- **Repositorio original**: [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php)
+- **Autor original**: [@edbizarro](https://github.com/edbizarro)
+- **Licencia original**: MIT
+
+El proyecto original proporcionaba imágenes Docker optimizadas para GitLab CI con múltiples versiones de PHP (7.3, 7.4, 8.0, 8.3) y diferentes variantes (Alpine, FPM, Chromium). Este fork mantiene la filosofía y estructura del proyecto original, pero se enfoca únicamente en PHP 8.3 con pnpm como gestor de paquetes de Node.js.
+
+### ¿Por qué este fork?
+
+- El proyecto original parece estar en mantenimiento limitado
+- Necesidad específica de mantener solo PHP 8.3 en desarrollo activo
+- Migración de Yarn a pnpm para mejor rendimiento y gestión de dependencias
+- Mantenimiento independiente sin depender del proyecto original
+
+Si el proyecto original vuelve a tener actividad regular, se recomienda considerar contribuir directamente a ese repositorio.
