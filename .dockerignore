@@ -1,10 +1,29 @@
-.editorconfig
+# Git
 .git
 .gitignore
-.gitlab-ci.yml
-.idea
-gitlab-ci-pipeline-php.png
-.pre-commit-config.yaml
-LICENSE
-Makefile
+
+# Documentation
 README.md
+*.md
+
+# Logs
+*.log
+build-*.log
+
+# Docker files
+docker-compose*.yml
+.dockerignore
+
+# Tests
+tests/
+scripts/verify-*.sh
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

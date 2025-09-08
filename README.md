@@ -1,29 +1,41 @@
-## Laravel GitLab CI image (PHP 8.3)
+# Laravel GitLab CI Docker Image (PHP 8.3)
 
-> **Nota importante**: Este repositorio es un fork independiente del proyecto original [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php). 
+> **Important Note**: This repository is an independent fork of the original project [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php). 
 > 
-> **Créditos y agradecimientos**: Todo el mérito del trabajo inicial pertenece a [@edbizarro](https://github.com/edbizarro) y los colaboradores del proyecto original. Este fork mantiene el respeto y reconocimiento al trabajo original.
+> **Credits and Acknowledgments**: All credit for the initial work belongs to [@edbizarro](https://github.com/edbizarro) and the contributors of the original project. This fork maintains respect and recognition for the original work.
 
-### Diferencias con el proyecto original
+## Docker Hub Repository
 
-En este fork se mantiene en desarrollo activo únicamente la versión PHP 8.3 y se sustituye Yarn por pnpm (Node 22 vía corepack). El proyecto original incluía múltiples versiones de PHP (7.3, 7.4, 8.0, 8.3) y usaba Yarn como gestor de paquetes de Node.js.
+**Repository**: [abkrim/laravel-gitlab-ci](https://hub.docker.com/repository/docker/abkrim/laravel-gitlab-ci/general)
 
-### Imagen
-- Docker Hub: `abkrim/laravel-gitlab-ci:8.3` (también `latest`)
-- Base: `php:8.3` (Debian). Multi‑arch: linux/amd64 y linux/arm64
-- Incluye: Composer 2, Node 22 + pnpm, Redis, APCu, PDO MySQL, Imagick, Xdebug (coverage), git, jq, rsync, unzip, zip
-- `mysql` CLI configurado para entorno local (sin TLS) mediante `~/.my.cnf`
+**Available Tags**:
+- `abkrim/laravel-gitlab-ci:8.3` (also available as `latest`)
+- Multi-arch support: `linux/amd64` and `linux/arm64`
 
----
+## Image Specifications
 
-### Uso rápido (local)
-Ejecuta tests de un proyecto Laravel con MySQL 8.0 y Redis levantados aparte:
+- **Base**: `php:8.3` (Debian)
+- **Package Manager**: pnpm (Node 22 via corepack)
+- **Included Tools**: Composer 2, Node 22 + pnpm, Redis, APCu, PDO MySQL, Imagick, Xdebug (coverage), git, jq, rsync, unzip, zip
+- **MySQL CLI**: Configured for local environment (no TLS) via `~/.my.cnf`
+
+## Differences from Original Project
+
+This fork maintains active development only for PHP 8.3 and replaces Yarn with pnpm (Node 22 via corepack). The original project included multiple PHP versions (7.3, 7.4, 8.0, 8.3) and used Yarn as the Node.js package manager.
+
+## Usage
+
+### Quick Start (Local Development)
+
+Run Laravel tests with MySQL 8.0 and Redis running separately:
 
 ```bash
 docker run --rm -it -v "$PWD":/var/www/html -w /var/www/html abkrim/laravel-gitlab-ci:8.3 bash -lc 'composer install --no-interaction --prefer-dist && pnpm install && cp .env.example .env && php artisan key:generate && php artisan migrate --force && ./vendor/bin/pest -v'
 ```
 
-Si necesitas MySQL/Redis locales, ejemplo mínimo con docker compose:
+### Docker Compose Example
+
+If you need local MySQL/Redis, here's a minimal docker-compose example:
 
 ```yaml
 services:
@@ -51,9 +63,10 @@ services:
       REDIS_PORT: 6379
 ```
 
----
+### GitLab CI Example
 
-### Ejemplo `.gitlab-ci.yml` (tests con pnpm + Pest)
+Example `.gitlab-ci.yml` for tests with pnpm + Pest:
+
 ```yaml
 stages:
   - test
@@ -90,33 +103,61 @@ test:
     - ./vendor/bin/pest -v
 ```
 
+## Notes
+
+- This image uses pnpm (not Yarn). Node 22 via corepack.
+- Xdebug is configured in coverage mode for PHP 8.x (coverage in Pest if you enable it in your commands).
+- The `mysql` client is configured without TLS to facilitate local usage; PDO in Laravel doesn't require changes by default.
+
+## License
+
+MIT (same as the original project).
+
 ---
 
-### Notas
-- Esta imagen usa pnpm (no Yarn). Node 22 via corepack.
-- Xdebug está configurado en modo cobertura para PHP 8.x (coverage en Pest si lo habilitas en tus comandos).
-- El cliente `mysql` se configura sin TLS para facilitar el uso en local; PDO en Laravel no requiere cambios por defecto.
+## Original Project
 
-### Licencia
-MIT (igual que el proyecto original).
+This fork is based on the excellent work of:
 
----
+- **Original Repository**: [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php)
+- **Original Author**: [@edbizarro](https://github.com/edbizarro)
+- **Original License**: MIT
 
-## Proyecto Original
+The original project provided Docker images optimized for GitLab CI with multiple PHP versions (7.3, 7.4, 8.0, 8.3) and different variants (Alpine, FPM, Chromium). This fork maintains the philosophy and structure of the original project, but focuses solely on PHP 8.3 with pnpm as the Node.js package manager.
 
-Este fork está basado en el excelente trabajo de:
+### Why This Fork?
 
-- **Repositorio original**: [edbizarro/gitlab-ci-pipeline-php](https://github.com/edbizarro/gitlab-ci-pipeline-php)
-- **Autor original**: [@edbizarro](https://github.com/edbizarro)
-- **Licencia original**: MIT
+- The original project appears to have limited maintenance
+- Specific need to maintain only PHP 8.3 in active development
+- Migration from Yarn to pnpm for better performance and dependency management
+- Independent maintenance without depending on the original project
 
-El proyecto original proporcionaba imágenes Docker optimizadas para GitLab CI con múltiples versiones de PHP (7.3, 7.4, 8.0, 8.3) y diferentes variantes (Alpine, FPM, Chromium). Este fork mantiene la filosofía y estructura del proyecto original, pero se enfoca únicamente en PHP 8.3 con pnpm como gestor de paquetes de Node.js.
+If the original project returns to regular activity, it's recommended to consider contributing directly to that repository.
 
-### ¿Por qué este fork?
+## Docker Hub Integration
 
-- El proyecto original parece estar en mantenimiento limitado
-- Necesidad específica de mantener solo PHP 8.3 en desarrollo activo
-- Migración de Yarn a pnpm para mejor rendimiento y gestión de dependencias
-- Mantenimiento independiente sin depender del proyecto original
+This repository is designed to work with Docker Hub's automated builds. The images are automatically built and pushed to [abkrim/laravel-gitlab-ci](https://hub.docker.com/repository/docker/abkrim/laravel-gitlab-ci/general) when changes are pushed to this repository.
 
-Si el proyecto original vuelve a tener actividad regular, se recomienda considerar contribuir directamente a ese repositorio.
+### Building Images Locally
+
+To build images locally for testing:
+
+```bash
+# Build PHP 8.3 image
+docker build -t abkrim/laravel-gitlab-ci:8.3 -f php/8.3/Dockerfile .
+
+# Build Alpine variant
+docker build -t abkrim/laravel-gitlab-ci:8.3-alpine -f php/8.3/alpine/Dockerfile .
+
+# Build FPM variant
+docker build -t abkrim/laravel-gitlab-ci:8.3-fpm -f php/8.3/fpm/Dockerfile .
+```
+
+### Multi-arch Builds
+
+For multi-architecture builds (AMD64 and ARM64):
+
+```bash
+# Build and push multi-arch
+docker buildx build --platform linux/amd64,linux/arm64 -t abkrim/laravel-gitlab-ci:8.3 --push .
+```

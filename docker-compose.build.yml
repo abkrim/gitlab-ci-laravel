@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Default PHP 8.3 image
+  php83:
+    build:
+      context: .
+      dockerfile: php/8.3/Dockerfile
+    image: abkrim/laravel-gitlab-ci:8.3
+    tags:
+      - abkrim/laravel-gitlab-ci:8.3
+      - abkrim/laravel-gitlab-ci:latest
+
+  # Alpine variant
+  php83-alpine:
+    build:
+      context: .
+      dockerfile: php/8.3/alpine/Dockerfile
+    image: abkrim/laravel-gitlab-ci:8.3-alpine
+    tags:
+      - abkrim/laravel-gitlab-ci:8.3-alpine
+
+  # FPM variant
+  php83-fpm:
+    build:
+      context: .
+      dockerfile: php/8.3/fpm/Dockerfile
+    image: abkrim/laravel-gitlab-ci:8.3-fpm
+    tags:
+      - abkrim/laravel-gitlab-ci:8.3-fpm
+
+  # Chromium variant
+  php83-chromium:
+    build:
+      context: .
+      dockerfile: php/8.3/chromium/Dockerfile
+    image: abkrim/laravel-gitlab-ci:8.3-chromium
+    tags:
+      - abkrim/laravel-gitlab-ci:8.3-chromium
