@@ -18,7 +18,6 @@ apt-get update \
     libatk1.0-0 \
     libcairo-gobject2 \
     libgtk-3-0 \
-    libgdk-pixbuf-2.0-0 \
     libdrm2 \
     libxcomposite1 \
     libxdamage1 \
@@ -27,18 +26,23 @@ apt-get update \
     wget \
     xvfb \
     gnupg \
-    ca-certificates
+    ca-certificates \
+  && (apt-get install -yq libgdk-pixbuf-2.0-0 || apt-get install -yq libgdk-pixbuf-xlib-2.0-0)
 
-echo "Adding Google Chrome repository..."
+arch=$(dpkg --print-architecture)
 
-# Add Google Chrome repository (updated method for newer Debian)
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
-  && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-  && apt-get update -yqq
+if [ "$arch" = "amd64" ]; then
+  echo "Adding Google Chrome repository (amd64)..."
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update -yqq
 
-echo "Installing Google Chrome..."
-
-# Install Google Chrome
-apt-get install -yqq google-chrome-stable
+  echo "Installing Google Chrome..."
+  apt-get install -yqq google-chrome-stable
+else
+  echo "Non-amd64 architecture ($arch) detected. Installing Chromium from Debian repos..."
+  apt-get update -yqq \
+    && apt-get install -yqq chromium || (echo "Chromium not available for $arch" && exit 1)
+fi
 
 echo "Chromium installation completed successfully!"

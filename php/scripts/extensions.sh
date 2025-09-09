@@ -75,16 +75,31 @@ apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && docker-php-ext-install -j$(nproc) $extensions
 
+# Determine LDAP libdir based on architecture
+arch=$(dpkg --print-architecture || echo amd64)
+case "$arch" in
+  amd64)
+    LDAP_LIBDIR="lib/x86_64-linux-gnu/"
+    ;;
+  arm64)
+    LDAP_LIBDIR="lib/aarch64-linux-gnu/"
+    ;;
+  *)
+    # Fallback: derive from uname
+    LDAP_LIBDIR="lib/$(uname -m)-linux-gnu/"
+    ;;
+esac
+
 if [[ "$PHP_VERSION" == 8.* || $PHP_VERSION == "7.4" ]]; then
   docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-configure ldap --with-libdir=$LDAP_LIBDIR \
     && docker-php-ext-install -j$(nproc) ldap \
     && docker-php-source delete
 else
   docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-webp-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-configure ldap --with-libdir=$LDAP_LIBDIR \
     && docker-php-ext-install -j$(nproc) ldap \
     && docker-php-source delete
 fi
