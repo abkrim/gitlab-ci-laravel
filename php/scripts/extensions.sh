@@ -43,7 +43,6 @@ else
 fi
 
 export buildDeps=" \
-    default-libmysqlclient-dev \
     libbz2-dev \
     libsasl2-dev \
     pkg-config \
@@ -136,9 +135,25 @@ else
 
   # Skip memcached on PHP 8.x to avoid missing runtime lib issues
 
-  pecl channel-update pecl.php.net \
-    && pecl install amqp redis apcu imagick xdebug \
-    && docker-php-ext-enable amqp redis apcu imagick xdebug
+  echo "Installing PECL extensions for PHP 8.x..."
+  
+  # Install extensions one by one to avoid failures
+  pecl channel-update pecl.php.net
+  
+  # Install Redis
+  pecl install redis && docker-php-ext-enable redis
+  
+  # Install APCu
+  pecl install apcu && docker-php-ext-enable apcu
+  
+  # Install Imagick
+  pecl install imagick && docker-php-ext-enable imagick
+  
+  # Install Xdebug
+  pecl install xdebug && docker-php-ext-enable xdebug
+  
+  # Install AMQP (may fail, but continue)
+  pecl install amqp && docker-php-ext-enable amqp || echo "AMQP installation failed, continuing..."
 fi
 
 { \

@@ -15,7 +15,9 @@ echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf
 export DEBIAN_FRONTEND=noninteractive
 
-  dpkg-reconfigure -f noninteractive tzdata \
+echo "Installing system packages..."
+
+dpkg-reconfigure -f noninteractive tzdata \
   && apt-get update \
   && apt-get install -yq \
       apt-transport-https \
@@ -35,4 +37,6 @@ export DEBIAN_FRONTEND=noninteractive
       zip \
       zlib1g-dev \
       && rm -rf /var/lib/apt/lists/*
+
+echo "System packages installed successfully!"
 
