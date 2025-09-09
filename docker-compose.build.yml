@@ -29,6 +29,15 @@ services:
     tags:
       - abkrim/laravel-gitlab-ci:8.3-fpm
 
+  # Minimal FPM variant (Laravel minimal runtime)
+  php83-fpm-min:
+    build:
+      context: .
+      dockerfile: php/8.3/fpm-min/Dockerfile
+    image: abkrim/laravel-gitlab-ci:8.3-fpm-min
+    tags:
+      - abkrim/laravel-gitlab-ci:8.3-fpm-min
+
   # Chromium variant
   php83-chromium:
     build:

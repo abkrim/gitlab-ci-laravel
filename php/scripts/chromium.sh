@@ -18,7 +18,7 @@ apt-get update \
     libatk1.0-0 \
     libcairo-gobject2 \
     libgtk-3-0 \
-    libgdk-pixbuf2.0-0 \
+    libgdk-pixbuf-2.0-0 \
     libdrm2 \
     libxcomposite1 \
     libxdamage1 \
